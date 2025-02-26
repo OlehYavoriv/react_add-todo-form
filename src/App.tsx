@@ -9,7 +9,12 @@ import { Todo } from './types/ToDo';
 
 const initialTodos = todosFromServer.map(todo => ({
   ...todo,
-  user: getUserById(todo.userId),
+  user: getUserById(todo.userId) || {
+    id: 0,
+    name: 'Unknown',
+    username: 'User',
+    email: 'unknown@gmail.com',
+  },
 }));
 
 const getNewTodoId = (todos: Todo[]) => {
@@ -46,6 +51,10 @@ export const App = () => {
     }
 
     const user = getUserById(userId);
+
+    if (!user) {
+      return;
+    }
 
     const newTodo: Todo = {
       id: getNewTodoId(todos),
